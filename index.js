@@ -4,7 +4,7 @@ var gutil = require('gulp-util');
 require('terminal-colors');
 
 var Filesystem = require('asar/lib/filesystem');
-var pickle = require('asar/node_modules/chromium-pickle');
+var pickle = require('asar/node_modules/chromium-pickle-js');
 
 const PLUGIN_NAME = 'gulp-asar';
 
