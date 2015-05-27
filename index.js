@@ -31,7 +31,7 @@ module.exports = function(destFilename, opts) {
 			filesystem.insertLink(file.relative, file.stat);
 		}
 		else {
-			filesystem.insertFile(file.relative, file.stat);
+			filesystem.insertFile(file.relative, false, file.stat);
 			outLen += file.contents.length;
 			out.push(file.contents);
 		}
