@@ -4,7 +4,7 @@ var gutil = require('gulp-util');
 require('terminal-colors');
 
 var Filesystem = require('asar/lib/filesystem');
-var pickle = require('asar/node_modules/chromium-pickle');
+var pickle = require('asar/node_modules/chromium-pickle-js');
 
 const PLUGIN_NAME = 'gulp-asar';
 
@@ -31,7 +31,7 @@ module.exports = function(destFilename, opts) {
 			filesystem.insertLink(file.relative, file.stat);
 		}
 		else {
-			filesystem.insertFile(file.relative, file.stat);
+			filesystem.insertFile(file.relative, false, file.stat);
 			outLen += file.contents.length;
 			out.push(file.contents);
 		}
