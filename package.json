@@ -1,6 +1,6 @@
 {
   "name": "gulp-asar",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Gulp plugin to generate atom-shell asar archives.",
   "main": "index.js",
   "engines": {
