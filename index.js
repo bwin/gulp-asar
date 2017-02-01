@@ -24,15 +24,18 @@ module.exports = function(destFilename, opts) {
 
     if (file.stat.isDirectory()) {
       filesystem.insertDirectory(file.relative);
+      cb();
     } else if (file.stat.isSymbolicLink()) {
       filesystem.insertLink(file.relative, file.stat);
+      cb();
     } else {
-      filesystem.insertFile(file.relative, false, file.stat);
-      outLen += file.contents.length;
-      out.push(file.contents);
-    }
+      filesystem.insertFile(file.relative, false, file, {}, function() {
+        outLen += file.contents.length;
+        out.push(file.contents);
 
-    cb();
+        cb();
+      });
+    }
   }, function(cb) {
     var headerPickle = pickle.createEmpty();
     headerPickle.writeString(JSON.stringify(filesystem.header));
