@@ -1,7 +1,5 @@
-
 var through = require('through2');
 var gutil = require('gulp-util');
-require('terminal-colors');
 
 var Filesystem = require('asar/lib/filesystem');
 var pickle = require('asar/node_modules/chromium-pickle-js');
@@ -11,7 +9,7 @@ const PLUGIN_NAME = 'gulp-asar';
 module.exports = function(destFilename, opts) {
 	opts = opts || {};
 	if (!destFilename) {
-		throw new gutil.PluginError(PLUGIN_NAME, 'destFilename'.blue + ' required');
+		throw new gutil.PluginError(PLUGIN_NAME, 'destFilename required');
 	}
 
 	var cwd = opts.base || process.cwd(); // ?
