@@ -1,7 +1,7 @@
 {
   "name": "gulp-asar",
   "version": "0.0.3",
-  "description": "Gulp plugin to generate atom-shell asar archives.",
+  "description": "Gulp plugin to generate Electron .asar archives.",
   "main": "index.js",
   "engines": {
     "node": ">= 0.10.0"
@@ -16,7 +16,7 @@
   "keywords": [
     "gulpplugin",
     "asar",
-    "atom-shell"
+    "electron"
   ],
   "author": "Benjamin Winkler (bwin)",
   "license": "MIT",
