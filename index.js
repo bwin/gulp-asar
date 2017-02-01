@@ -2,7 +2,7 @@ var through = require('through2');
 var gutil = require('gulp-util');
 
 var Filesystem = require('asar/lib/filesystem');
-var pickle = require('asar/node_modules/chromium-pickle-js');
+var pickle = require('chromium-pickle-js');
 
 const PLUGIN_NAME = 'gulp-asar';
 

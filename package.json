@@ -29,8 +29,9 @@
     "mocha": "^2.2.5"
   },
   "dependencies": {
-    "asar": "^0.7.2",
+    "asar": "^0.13.0",
     "gulp-util": "^3.0.3",
+    "chromium-pickle-js": "^0.2.0",
     "through2": "^2.0.0"
   }
 }
