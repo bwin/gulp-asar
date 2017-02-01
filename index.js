@@ -29,6 +29,9 @@ module.exports = function(destFilename, opts) {
       filesystem.insertLink(file.relative, file.stat);
       cb();
     } else {
+      // File length could have changed if the file have been modified:
+      file.stat.size = file.contents.length;
+
       filesystem.insertFile(file.relative, false, file, {}, function() {
         outLen += file.contents.length;
         out.push(file.contents);
