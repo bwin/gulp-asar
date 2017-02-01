@@ -1,65 +1,65 @@
-var through = require('through2');
-var gutil = require('gulp-util');
+var through = require("through2");
+var gutil = require("gulp-util");
 
-var Filesystem = require('asar/lib/filesystem');
-var pickle = require('chromium-pickle-js');
+var Filesystem = require("asar/lib/filesystem");
+var pickle = require("chromium-pickle-js");
 
-const PLUGIN_NAME = 'gulp-asar';
+const PLUGIN_NAME = "gulp-asar";
 
 module.exports = function(destFilename, opts) {
-	opts = opts || {};
-	if (!destFilename) {
-		throw new gutil.PluginError(PLUGIN_NAME, 'destFilename required');
-	}
+  opts = opts || {};
+  if (!destFilename) {
+    throw new gutil.PluginError(PLUGIN_NAME, "destFilename required");
+  }
 
-	var cwd = opts.base || process.cwd(); // ?
-	var filesystem = new Filesystem(cwd);
-	var out = [];
-	var outLen = 0;
+  var cwd = opts.base || process.cwd(); // ?
+  var filesystem = new Filesystem(cwd);
+  var out = [];
+  var outLen = 0;
 
-	var stream = through.obj(function(file, enc, cb) {
-		if (file.isStream()) {
-			return cb(new gutil.PluginError(PLUGIN_NAME, 'Streaming not supported'));
-		}
+  var stream = through.obj(function(file, enc, cb) {
+    if (file.isStream()) {
+      return cb(new gutil.PluginError(PLUGIN_NAME, "Streaming not supported"));
+    }
 
-		if(file.stat.isDirectory()) {
-			filesystem.insertDirectory(file.relative);
-		}
-		else if(file.stat.isSymbolicLink()) {
-			filesystem.insertLink(file.relative, file.stat);
-		}
-		else {
-			filesystem.insertFile(file.relative, false, file.stat);
-			outLen += file.contents.length;
-			out.push(file.contents);
-		}
-		cb();
-	}, function(cb) {
-		var headerPickle = pickle.createEmpty();
-		headerPickle.writeString(JSON.stringify(filesystem.header));
-		var headerBuf = headerPickle.toBuffer();
+    if (file.stat.isDirectory()) {
+      filesystem.insertDirectory(file.relative);
+    } else if (file.stat.isSymbolicLink()) {
+      filesystem.insertLink(file.relative, file.stat);
+    } else {
+      filesystem.insertFile(file.relative, false, file.stat);
+      outLen += file.contents.length;
+      out.push(file.contents);
+    }
 
-		var sizePickle = pickle.createEmpty();
-		sizePickle.writeUInt32(headerBuf.length);
-		var sizeBuf = sizePickle.toBuffer();
+    cb();
+  }, function(cb) {
+    var headerPickle = pickle.createEmpty();
+    headerPickle.writeString(JSON.stringify(filesystem.header));
+    var headerBuf = headerPickle.toBuffer();
 
-		outLen += headerBuf.length;
-		outLen += sizeBuf.length;
-		out.unshift(headerBuf);
-		out.unshift(sizeBuf);
+    var sizePickle = pickle.createEmpty();
+    sizePickle.writeUInt32(headerBuf.length);
+    var sizeBuf = sizePickle.toBuffer();
 
-		var archive = Buffer.concat(out, outLen);
-		out = [];
+    outLen += headerBuf.length;
+    outLen += sizeBuf.length;
+    out.unshift(headerBuf);
+    out.unshift(sizeBuf);
 
-		this.push(new gutil.File({
-			cwd: cwd,
-			base: cwd,
-			path: destFilename,
-			contents: archive,
-			enc: 'utf8'
-		}));
+    var archive = Buffer.concat(out, outLen);
+    out = [];
 
-		cb();
-	});
-	return stream;
+    this.push(new gutil.File({
+      cwd: cwd,
+      base: cwd,
+      path: destFilename,
+      contents: archive,
+      enc: "utf8"
+    }));
+
+    cb();
+  });
+
+  return stream;
 };
